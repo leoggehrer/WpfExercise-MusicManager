@@ -62,7 +62,7 @@ namespace Repository.Logic.Repos
         #region Update
         public virtual bool Update(TModel model)
         {
-            var listModel = GetById(model.Id);
+            var listModel = modelList.FirstOrDefault(m => m.Id == model.Id);
 
             if (listModel != null)
             {
