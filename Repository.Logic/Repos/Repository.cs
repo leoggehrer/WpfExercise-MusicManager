@@ -80,11 +80,11 @@ namespace Repository.Logic.Repos
         #region Delete
         public virtual void Delete(int id)
         {
-            var model = GetById(id);
+            var listModel = modelList.FirstOrDefault(m => m.Id == id);
 
-            if (model != null)
+            if (listModel != null)
             {
-                modelList.Remove(model);
+                modelList.Remove(listModel);
             }
         }
         public virtual Task DeleteAsync(int id)
