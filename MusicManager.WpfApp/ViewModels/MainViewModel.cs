@@ -8,14 +8,23 @@ namespace MusicManager.WpfApp.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        #region Album fields
         private ICommand? _addAlbumCommand = null;
         private ICommand? _editAlbumCommand = null;
         private ICommand? _deleteAlbumCommand = null;
+        private Logic.Models.Album? _selectedAlbum = null;
+        private string? _searchTextAlbum;
+        #endregion Album fields
 
+        #region Track fields
         private ICommand? _addTrackCommand = null;
         private ICommand? _editTrackCommand = null;
         private ICommand? _deleteTrackCommand = null;
+        private Logic.Models.Track? _selectedTrack = null;
+        private string? _searchTextTrack;
+        #endregion Track fields
 
+        #region Album properties
         public ICommand AddAlbumCommand
         {
             get
@@ -37,12 +46,42 @@ namespace MusicManager.WpfApp.ViewModels
                 return RelayCommand.CreateCommand(ref _deleteAlbumCommand, (p) => DeleteAlbum(SelectedAlbum!.Id), (p) => SelectedAlbum != null);
             }
         }
+        public ObservableCollection<Logic.Models.Album> Albums
+        {
+            get
+            {
+                var repo = new Logic.Repos.AlbumRepository();
+                var models = repo.GetAll().Where(e => string.IsNullOrEmpty(_searchTextAlbum) || e.ToString().ToLower().Contains(SearchTextAlbum.ToLower()));
 
+                return new ObservableCollection<Logic.Models.Album>(models);
+            }
+        }
+        public string SearchTextAlbum
+        {
+            get => _searchTextAlbum ?? string.Empty;
+            set
+            {
+                _searchTextAlbum = value;
+                OnPropertyChanged(nameof(Albums));
+            }
+        }
+        public Logic.Models.Album? SelectedAlbum
+        {
+            get => _selectedAlbum;
+            set
+            {
+                _selectedAlbum = value;
+                OnPropertyChanged(nameof(Tracks));
+            }
+        }
+        #endregion Album properties
+
+        #region Track properties
         public ICommand AddTrackCommand
         {
             get
             {
-                return RelayCommand.CreateCommand(ref _addTrackCommand, (p) => AddTrack(), (p) => true);
+                return RelayCommand.CreateCommand(ref _addTrackCommand, (p) => AddTrack(), (p) => SelectedAlbum != null);
             }
         }
         public ICommand EditTrackCommand
@@ -59,17 +98,52 @@ namespace MusicManager.WpfApp.ViewModels
                 return RelayCommand.CreateCommand(ref _deleteTrackCommand, (p) => DeleteTrack(SelectedTrack!.Id), (p) => SelectedTrack != null);
             }
         }
+        public ObservableCollection<Logic.Models.Track> Tracks
+        {
+            get
+            {
+                var result = default(ObservableCollection<Logic.Models.Track>);
 
+                if (SelectedAlbum != null)
+                {
+                    var repo = new Logic.Repos.TrackRepository();
+                    var models = repo.GetAll().Where(e => e.AlbumId == SelectedAlbum!.Id && (string.IsNullOrEmpty(_searchTextTrack) || e.ToString().ToLower().Contains(SearchTextTrack.ToLower())));
+
+                    result = new ObservableCollection<Logic.Models.Track>(models);
+                }
+                return result ?? new ObservableCollection<Logic.Models.Track>();
+            }
+        }
+        public string SearchTextTrack
+        {
+            get => _searchTextTrack ?? string.Empty;
+            set
+            {
+                _searchTextTrack = value;
+                OnPropertyChanged(nameof(Tracks));
+            }
+        }
+        public Logic.Models.Track? SelectedTrack
+        {
+            get => _selectedTrack;
+            set
+            {
+                _selectedTrack = value;
+            }
+        }
+        #endregion Track properties
+
+        #region Album methods
         private void AddAlbum()
         {
-            AlbumWindow window = new AlbumWindow();
+            var window = new AlbumWindow();
 
             window.ShowDialog();
             OnPropertyChanged(nameof(Albums));
         }
         private void EditAlbum(int id)
         {
-            AlbumWindow window = new AlbumWindow();
+            var window = new AlbumWindow();
 
             if (window.DataContext is AlbumViewModel viewModel)
             {
@@ -89,106 +163,39 @@ namespace MusicManager.WpfApp.ViewModels
                 OnPropertyChanged(nameof(Albums));
             }
         }
+        #endregion Album methods
 
+        #region Track methods
         private void AddTrack()
         {
-            AlbumWindow window = new AlbumWindow();
+            var window = new TrackWindow();
 
+            window.ViewModel.AlbumId = SelectedAlbum!.Id;
             window.ShowDialog();
-            OnPropertyChanged(nameof(Albums));
+            OnPropertyChanged(nameof(Tracks));
         }
         private void EditTrack(int id)
         {
-            AlbumWindow window = new AlbumWindow();
+            var window = new TrackWindow();
 
-            if (window.DataContext is AlbumViewModel viewModel)
+            if (window.DataContext is TrackViewModel viewModel)
             {
-                viewModel.Model = SelectedAlbum!;
+                viewModel.Model = SelectedTrack!;
             }
             window.ShowDialog();
-            OnPropertyChanged(nameof(Albums));
+            OnPropertyChanged(nameof(Tracks));
         }
         private void DeleteTrack(int id)
         {
-            if (MessageBox.Show($"Delete item '{SelectedAlbum!}'?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Delete item '{SelectedTrack!}'?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                var repo = new Logic.Repos.AlbumRepository();
+                var repo = new Logic.Repos.TrackRepository();
 
                 repo.Delete(id);
                 repo.SaveChanges();
-                OnPropertyChanged(nameof(Albums));
-            }
-        }
-
-        public ObservableCollection<Logic.Models.Album> Albums
-        {
-            get
-            {
-                var repo = new Logic.Repos.AlbumRepository();
-                var models = repo.GetAll().Where(e => string.IsNullOrEmpty(_searchTextAlbum) || e.ToString().ToLower().Contains(SearchTextAlbum.ToLower()));
-
-                return new ObservableCollection<Logic.Models.Album>(models);
-            }
-        }
-        public ObservableCollection<Logic.Models.Track> Tracks
-        {
-            get
-            {
-                var result = default(ObservableCollection<Logic.Models.Track>);
-
-                if (SelectedAlbum != null)
-                {
-                    var repo = new Logic.Repos.TrackRepository();
-                    var models = repo.GetAll().Where(e => e.AlbumId == SelectedAlbum!.Id && string.IsNullOrEmpty(_searchTextTrack) || e.ToString().ToLower().Contains(SearchTextTrack.ToLower()));
-
-                    result = new ObservableCollection<Logic.Models.Track>(models);
-                }
-                return result ?? new ObservableCollection<Logic.Models.Track>();
-            }
-        }
-
-
-        private Logic.Models.Album? _selectedAlbum = null;
-        public Logic.Models.Album? SelectedAlbum
-        {
-            get => _selectedAlbum;
-            set
-            {
-                _selectedAlbum = value;
                 OnPropertyChanged(nameof(Tracks));
             }
         }
-        private string? _searchTextAlbum;
-        public string SearchTextAlbum
-        {
-            get => _searchTextAlbum ?? string.Empty;
-            set
-            {
-                _searchTextAlbum = value;
-                OnPropertyChanged(nameof(Albums));
-            }
-        }
-
-        private Logic.Models.Track? _selectedTrack = null;
-        public Logic.Models.Track? SelectedTrack
-        {
-            get => _selectedTrack;
-            set
-            {
-                _selectedTrack = value;
-            }
-        }
-
-        private string? _searchTextTrack;
-        public string SearchTextTrack
-        {
-            get => _searchTextTrack ?? string.Empty;
-            set
-            {
-                _searchTextTrack = value;
-                OnPropertyChanged(nameof(Tracks));
-            }
-        }
-
+        #endregion Track methods
     }
 }

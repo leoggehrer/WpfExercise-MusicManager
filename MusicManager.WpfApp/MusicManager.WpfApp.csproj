@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Repository.Logic\Repository.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="TrackWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
