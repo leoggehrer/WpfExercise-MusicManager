@@ -5,6 +5,10 @@
         public string Title { get; set; } = string.Empty;
         public string Interpreter { get; set; } = string.Empty;
 
+        public override string ToString()
+        {
+            return $"{Title} {Interpreter}";
+        }
         public object Clone()
         {
             return new Album

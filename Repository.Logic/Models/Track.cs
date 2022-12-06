@@ -6,6 +6,10 @@
         public string Name { get; set; } = string.Empty;
         public string Composer { get; set; } = string.Empty;
 
+        public override string ToString()
+        {
+            return $"{Name} {Composer}";
+        }
         public object Clone()
         {
             return new Track
