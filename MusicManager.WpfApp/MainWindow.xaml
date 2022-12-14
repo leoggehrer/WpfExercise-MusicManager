@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MusicManager.WpfApp"
         xmlns:vm="clr-namespace:MusicManager.WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Music-Manager" Height="600" Width="800">
+        Title="Music-Manager" Height="600" Width="820">
     <Window.DataContext>
         <vm:MainViewModel x:Name="ViewModel"></vm:MainViewModel>
     </Window.DataContext>
@@ -24,6 +24,7 @@
             <ColumnDefinition Width="30"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label Margin="10" FontSize="12" FontWeight="Bold">Album(s)</Label>
             <TextBox Width="300" Margin="10 10 0 10" Text="{Binding Path=SearchTextAlbum, UpdateSourceTrigger=PropertyChanged}" ></TextBox>
             <Button Width="100" Margin="10" Command="{Binding Path=DeleteAlbumCommand}" BorderBrush="Red" Background="WhiteSmoke">Delete</Button>
             <Button Width="100" Margin="10" Command="{Binding Path=EditAlbumCommand}">Edit</Button>
@@ -39,11 +40,12 @@
                   SelectedItem="{Binding Path=SelectedAlbum}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title" Binding="{Binding Path=Title}"/>
-                <DataGridTextColumn Width="*" Header="Interpret" Binding="{Binding Path=Interpreter}" />
+                <DataGridTextColumn Width="*" Header="Interpreter" Binding="{Binding Path=Interpreter}" />
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label Margin="10" FontSize="12" FontWeight="Bold">Track(s)</Label>
             <TextBox Width="300" Margin="10 10 0 10" Text="{Binding Path=SearchTextTrack, UpdateSourceTrigger=PropertyChanged}" ></TextBox>
             <Button Width="100" Margin="10" Command="{Binding Path=DeleteTrackCommand}" BorderBrush="Red" Background="WhiteSmoke">Delete</Button>
             <Button Width="100" Margin="10" Command="{Binding Path=EditTrackCommand}">Edit</Button>
