@@ -9,6 +9,11 @@ namespace Repository.Logic.Repos
         {
 
         }
+        public TrackRepository(string filePath)
+            : base(filePath) 
+        {
+
+        }
         public override Track Create()
         {
             return new Track();

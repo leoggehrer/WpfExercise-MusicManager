@@ -6,6 +6,8 @@ namespace MusicManager.WpfApp.ViewModels
 {
     public class AlbumViewModel : BaseViewModel
     {
+        public static string AlbumFilePath = @"C:\Temp\album.json";
+
         private ICommand? _saveCommand = null;
         private ICommand? _closeCommand = null;
 
@@ -55,7 +57,7 @@ namespace MusicManager.WpfApp.ViewModels
 
         public void Save()
         {
-            using var repo = new Logic.Repos.AlbumRepository();
+            using var repo = new Logic.Repos.AlbumRepository(AlbumFilePath);
 
             if (Model.Id == 0)
             {

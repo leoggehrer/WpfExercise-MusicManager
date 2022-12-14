@@ -1,6 +1,6 @@
 ﻿namespace Repository.Logic.Models
 {
-    public class Track : ModelObject, ICloneable
+    public class Track : ModelObject
     {
         public int AlbumId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -9,16 +9,6 @@
         public override string ToString()
         {
             return $"{Name} {Composer}";
-        }
-        public object Clone()
-        {
-            return new Track
-            {
-                Id = Id,
-                AlbumId = AlbumId,
-                Name = Name,
-                Composer = Composer,
-            };
         }
     }
 }

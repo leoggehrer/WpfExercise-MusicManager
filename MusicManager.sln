@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Logic", "Repository.Logic\Repository.Logic.csproj", "{FC407980-A749-4D20-AB20-4B66EA7AEF82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManager.WpfApp", "MusicManager.WpfApp\MusicManager.WpfApp.csproj", "{BDAACFB0-7DD4-48E5-AA40-16BDB72B9A2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicManager.WpfApp", "MusicManager.WpfApp\MusicManager.WpfApp.csproj", "{BDAACFB0-7DD4-48E5-AA40-16BDB72B9A2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicManager.ConApp", "MusicManager.ConApp\MusicManager.ConApp.csproj", "{F33AB66A-C1C5-46A6-B345-7BE73FD0D2ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BDAACFB0-7DD4-48E5-AA40-16BDB72B9A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDAACFB0-7DD4-48E5-AA40-16BDB72B9A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDAACFB0-7DD4-48E5-AA40-16BDB72B9A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F33AB66A-C1C5-46A6-B345-7BE73FD0D2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F33AB66A-C1C5-46A6-B345-7BE73FD0D2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F33AB66A-C1C5-46A6-B345-7BE73FD0D2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F33AB66A-C1C5-46A6-B345-7BE73FD0D2ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

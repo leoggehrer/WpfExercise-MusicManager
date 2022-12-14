@@ -50,7 +50,7 @@ namespace MusicManager.WpfApp.ViewModels
         {
             get
             {
-                var repo = new Logic.Repos.AlbumRepository();
+                var repo = new Logic.Repos.AlbumRepository(AlbumViewModel.AlbumFilePath);
                 var models = repo.GetAll().Where(e => string.IsNullOrEmpty(_searchTextAlbum) || e.ToString().ToLower().Contains(SearchTextAlbum.ToLower()));
 
                 return new ObservableCollection<Logic.Models.Album>(models);
@@ -106,7 +106,7 @@ namespace MusicManager.WpfApp.ViewModels
 
                 if (SelectedAlbum != null)
                 {
-                    var repo = new Logic.Repos.TrackRepository();
+                    var repo = new Logic.Repos.TrackRepository(TrackViewModel.TrackFilePath);
                     var models = repo.GetAll().Where(e => e.AlbumId == SelectedAlbum!.Id && (string.IsNullOrEmpty(_searchTextTrack) || e.ToString().ToLower().Contains(SearchTextTrack.ToLower())));
 
                     result = new ObservableCollection<Logic.Models.Track>(models);

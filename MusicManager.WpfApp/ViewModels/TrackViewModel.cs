@@ -6,6 +6,8 @@ namespace MusicManager.WpfApp.ViewModels
 {
     public class TrackViewModel : BaseViewModel
     {
+        public static string TrackFilePath = @"C:\Temp\track.json";
+
         private ICommand? _saveCommand = null;
         private ICommand? _closeCommand = null;
 
@@ -63,7 +65,7 @@ namespace MusicManager.WpfApp.ViewModels
 
         public void Save()
         {
-            using var repo = new Logic.Repos.TrackRepository();
+            using var repo = new Logic.Repos.TrackRepository(TrackFilePath);
 
             if (Model.Id == 0)
             {
@@ -71,6 +73,7 @@ namespace MusicManager.WpfApp.ViewModels
             }
             else
             {
+
                 repo.Update(Model);
             }
             repo.SaveChanges();

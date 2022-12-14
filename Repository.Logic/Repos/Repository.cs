@@ -3,10 +3,10 @@
 namespace Repository.Logic.Repos
 {
     public abstract class Repository<TModel> : IDisposable
-        where TModel : Models.ModelObject, Contracts.IIdentifyable, ICloneable
+        where TModel : Models.ModelObject, Contracts.IIdentifyable
     {
         #region Fields
-        private List<TModel> modelList = new();
+        private List<TModel> _modelList = new();
         #endregion Fields
 
         #region Properties
@@ -29,29 +29,30 @@ namespace Repository.Logic.Repos
         #endregion Create
 
         #region Get
-        public virtual TModel? GetById(int id) => modelList.FirstOrDefault(m => m.Id == id)?.Clone() as TModel;
+        public virtual TModel? GetById(int id) => _modelList.FirstOrDefault(m => m.Id == id);
         public virtual Task<TModel?> GetByIdAsync(int id) => Task.Run(() => GetById(id)); 
         public virtual TModel[] GetAll()
         {
-            return modelList.Where(m => m is TModel)
-                            .Select(m => (m.Clone() as TModel)!)
+            return _modelList.Where(m => m is TModel)
                             .ToArray();
         }
         public virtual Task<TModel[]> GetAllAsync() => Task.Run(() => GetAll());
         #endregion Get
 
+        public void Clear() => _modelList.Clear();
+
         #region Add
         public virtual void Add(TModel model)
         {
-            if (modelList.Any())
+            if (_modelList.Any())
             {
-                model.Id = modelList.Max(m => m.Id) + 1;
+                model.Id = _modelList.Max(m => m.Id) + 1;
             }
             else
             {
                 model.Id = 1;
             }
-            modelList.Add((TModel)model.Clone());
+            _modelList.Add(model);
         }
         public virtual Task AddAsync(TModel model)
         {
@@ -62,12 +63,12 @@ namespace Repository.Logic.Repos
         #region Update
         public virtual bool Update(TModel model)
         {
-            var listModel = modelList.FirstOrDefault(m => m.Id == model.Id);
+            var listModel = _modelList.FirstOrDefault(m => m.Id == model.Id);
 
             if (listModel != null)
             {
-                modelList.Remove(listModel);
-                modelList.Add(model);
+                _modelList.Remove(listModel);
+                _modelList.Add(model);
             }
             return listModel != null;
         }
@@ -80,11 +81,11 @@ namespace Repository.Logic.Repos
         #region Delete
         public virtual void Delete(int id)
         {
-            var listModel = modelList.FirstOrDefault(m => m.Id == id);
+            var listModel = _modelList.FirstOrDefault(m => m.Id == id);
 
             if (listModel != null)
             {
-                modelList.Remove(listModel);
+                _modelList.Remove(listModel);
             }
         }
         public virtual Task DeleteAsync(int id)
@@ -107,13 +108,13 @@ namespace Repository.Logic.Repos
         #region Load and save
         internal virtual void Save(string filePath)
         {
-            var jsonData = JsonSerializer.Serialize<TModel[]>(modelList.ToArray());
+            var jsonData = JsonSerializer.Serialize<TModel[]>(_modelList.ToArray());
 
             File.WriteAllText(filePath, jsonData);
         }
         internal virtual void Load(string filePath)
         {
-            modelList.Clear();
+            _modelList.Clear();
             if (File.Exists(filePath))
             {
                 var jsonData = File.ReadAllText(filePath);
@@ -121,7 +122,7 @@ namespace Repository.Logic.Repos
 
                 if (models != null)
                 {
-                    modelList.AddRange(models);
+                    _modelList.AddRange(models);
                 }
             }
         }

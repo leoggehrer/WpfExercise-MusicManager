@@ -9,6 +9,11 @@ namespace Repository.Logic.Repos
         {
 
         }
+        public AlbumRepository(string filePath)
+            : base(filePath) 
+        {
+
+        }
         public override Album Create()
         {
             return new Album();
