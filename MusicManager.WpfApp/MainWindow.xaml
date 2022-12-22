@@ -62,6 +62,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
                 <DataGridTextColumn Width="*" Header="Composer" Binding="{Binding Path=Composer}" />
+                <DataGridTextColumn Header="Genre" Binding="{Binding Path=Genre}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

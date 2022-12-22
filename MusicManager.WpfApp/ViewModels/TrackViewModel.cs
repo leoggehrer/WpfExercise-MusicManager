@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using Logic = Repository.Logic;
 
@@ -62,7 +63,23 @@ namespace MusicManager.WpfApp.ViewModels
                 Model.Composer = value;
             }
         }
+        public string Genre
+        {
+            get => Model.Genre.ToString();
+            set
+            {
+                Model.Genre = (Logic.Models.Genre)Enum.Parse(typeof(Logic.Models.Genre), value);
+            }
+        }
+        public string[] GenreList
+        {
+            get
+            {
+                var values = Enum.GetNames(typeof(Logic.Models.Genre));
 
+                return values.OrderBy(v => v).ToArray();
+            }
+        }
         public void Save()
         {
             using var repo = new Logic.Repos.TrackRepository(TrackFilePath);
